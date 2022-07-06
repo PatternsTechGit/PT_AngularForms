@@ -22,7 +22,7 @@ export class AppComponent {
   constructor(private azureAdService: AzureAdService, private accountsService: AccountsService) {
     this.initializeEmptyForm();
   }
-  onAdUserSelect($event:any) {
+  onAdUserSelect() {
     // few of the  properties of account object will be populated from the properties of Azure AD User
     this.account.user.id = this.selectedAdUser.id
     this.account.user.firstName = this.selectedAdUser.givenName;
@@ -40,7 +40,7 @@ export class AppComponent {
           },
         }); */
   }
-  onSubmit(form:any) {
+  onSubmit() {
     console.log(this.account);
     this.accountsService
     // sending the two way binded and populated account object to the server to get persisted.

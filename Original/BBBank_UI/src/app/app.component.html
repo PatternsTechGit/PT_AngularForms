@@ -5,7 +5,7 @@
 <div class="card-body"> -->
 <!-- onSubmit function will be called when any button with type=submit is clicked within this form -->
 <!-- accountForm gives a unique name to the form. and ngForm attaches element validation to that form. -->
-<form class="example-container" (ngSubmit)="onSubmit(accountForm)" #accountForm="ngForm" novalidate>
+<form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate>
   <div class="row">
     <div class="col-12">
       <div class="card card-user">
@@ -30,7 +30,7 @@
                   <!-- currently selected active directory user will be in selectedAdUser -->
                   <!-- on Select's selection change "onAdUserSelect" function will be called -->
                   <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser"
-                    (change)="onAdUserSelect($event)">
+                    (change)="onAdUserSelect()">
                     <option [ngValue]="null" selected disabled>Select Azure AD User</option>
                     <!-- All AD Users fetched from the server are in array of type azureAdUser called azureAdUsers  -->
                     <!-- looping on that array to populate Select control and setting the individual value to adUser and picking up displayName from it for display -->
