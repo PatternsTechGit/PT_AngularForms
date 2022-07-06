@@ -1,0 +1,162 @@
+<!-- <div class="container-fluid">
+  <app-toolbar></app-toolbar>
+</div>
+
+<div class="card-body"> -->
+<!-- onSubmit function will be called when any button with type=submit is clicked within this form -->
+<!-- accountForm gives a unique name to the form. and ngForm attaches element validation to that form. -->
+<form class="example-container" (ngSubmit)="onSubmit(accountForm)" #accountForm="ngForm" novalidate>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-user">
+        <div class="card-body">
+          <div class="author">
+            <div class="block block-one"></div>
+            <div class="block block-two"></div>
+            <div class="block block-three"></div>
+            <div class="block block-four"></div>
+            <!-- all the elements in the form are two way binded to a property called account of type Account.  -->
+            <div class="avatar-cont">
+              <img id="photo" alt="..." class="avatar" src="{{account.user.profilePicUrl}}" />
+              <a href="javascript:void(0)" class="btn-change-avatar"><i class="fas fa-camera"></i></a>
+            </div>
+
+          </div>
+          <div class="row mt-3">
+            <!-- Custom Validator https://www.digitalocean.com/community/tutorials/angular-custom-validation -->
+            <div class="col-sm-12 ml-auto mr-auto">
+              <div class="amount-cont">
+                <div class="form-row row">
+                  <!-- currently selected active directory user will be in selectedAdUser -->
+                  <!-- on Select's selection change "onAdUserSelect" function will be called -->
+                  <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser"
+                    (change)="onAdUserSelect($event)">
+                    <option [ngValue]="null" selected disabled>Select Azure AD User</option>
+                    <!-- All AD Users fetched from the server are in array of type azureAdUser called azureAdUsers  -->
+                    <!-- looping on that array to populate Select control and setting the individual value to adUser and picking up displayName from it for display -->
+                    <option *ngFor="let adUser of azureAdUsers" [ngValue]="adUser">{{adUser?.displayName}}</option>
+                  </select>
+                </div>
+                <div class="form-row row">
+                  <div class="col-6">
+                    <div class="my-1">
+                      <label for="accountTitle">Account Title</label>
+                      <!-- #accountTitle gives unique name of this control that is later referenced in validation. -->
+                      <!-- this control has required, maxlength, and minlength validators. -->
+                      <!-- and this control is two way binded to  account.accountTitle property -->
+                      <input #accountTitle="ngModel" type="text" class="form-control" id="accountTitle"
+                        placeholder="Account Title" [(ngModel)]="account.accountTitle" name="accountTitle" required
+                        minlength="4" maxlength="30" />
+                    </div>
+                    <div class="my-1">
+                      <label for="accountNumber">Account Number</label>
+                      <input #accountNumber="ngModel" type="text" class="form-control" id="accountNumber"
+                        placeholder="Account Number" [(ngModel)]="account.accountNumber" name="accountNumber"
+                        required />
+                    </div>
+                    <div class="my-1">
+                      <label for="openingBalance">Opening Balance</label>
+                      <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">$</div>
+                        </div>
+                        <input type="number" class="form-control" id="currentBalance" placeholder="Current Balance"
+                          [(ngModel)]="account.currentBalance" name="currentBalance"
+                          onKeyPress="if(this.value.length==10) return false;" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="my-1">
+                      <label for="phoneNumber">Phone Number</label>
+                      <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number"
+                        [(ngModel)]="account.user.phoneNumber" name="phoneNumber"
+                        onKeyPress="if(this.value.length==10) return false;" />
+                    </div>
+                    <div class="my-1">
+                      <label for="email">Email</label>
+                      <!-- special case where we are validating this text box using an Email Reg Ex along with other built in validators. -->
+                      <input type="email" class="form-control" placeholder="Email" [(ngModel)]="account.user.email"
+                        id="email" name="email" #email="ngModel" required minlength="6"
+                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                    </div>
+                    <div class="my-1">
+                      <label for="accountStatus">Account Status</label>
+
+                      <!-- two radio buttons with same name binded to same model but different ids and different values make it work in a group  -->
+                      <div class="segmented-control">
+                        <input type="radio" name="accountStatus" id="accountStatus-1" value="1"
+                          [(ngModel)]="account.accountStatus" />
+                        <input type="radio" name="accountStatus" id="accountStatus-2" value="0"
+                          [(ngModel)]="account.accountStatus" />
+
+                        <label for="accountStatus-1" data-value="Active">Active</label>
+                        <label for="accountStatus-2" data-value="Inactive">Inactive</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- x -->
+
+
+  <div class="row">
+    <div class="col-12">
+      <!-- This block/set of error texts will only appear if accountTitle has any errors and accountTitle is touched ot dirty -->
+      <div class="error-message" *ngIf="
+          accountTitle.errors && (accountTitle.dirty || accountTitle.touched)
+        ">
+        <!-- with the set of error messages this particular error will only be shown if "required" validation is failed.  -->
+        <p class="text-warning" [hidden]="!accountTitle.errors?.['required']">
+          <b>Warning:</b> That Account Title is required.
+        </p>
+        <p class="text-warning" [hidden]="!accountTitle.errors?.['minlength']">
+          <b>Warning:</b> Account Title must be greater than 3 characters.
+        </p>
+      </div>
+      <!-- similar concept is applied on other validation messages -->
+      <div class="error-message" *ngIf="email.errors && (email.dirty || email.touched)">
+        <p class="text-warning" [hidden]="!email.errors?.['required']">
+          <b>Warning:</b> That Email is required.
+        </p>
+        <p class="text-warning" [hidden]="!email.errors?.['pattern']">
+          <b>Warning:</b> Email is not in correct format.
+        </p>
+        <p class="text-warning" [hidden]="!email.errors?.['minlength']">
+          <b>Warning:</b> Email must be greater than 6 characters.
+        </p>
+      </div>
+      <div class="error-message" *ngIf="accountNumber.errors && (accountNumber.dirty || accountNumber.touched)">
+        <p class="text-warning" [hidden]="!accountNumber.errors?.['required']">
+          <b>Warning:</b> Account Number is required.
+        </p>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <button class="btn btn-cancel btn-block" type="button">Cancel</button>
+            </div>
+            <div class="col-6">
+              <!-- like we can track validation of individual forms we can also track validation of entire form -->
+              <!-- Create buttons caus the form to trigger submit behavior but is disabled until entire form is in valid sate. -->
+              <button [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<!-- </div>
+
+<router-outlet></router-outlet> -->
+

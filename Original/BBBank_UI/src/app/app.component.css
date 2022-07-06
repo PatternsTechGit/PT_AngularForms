@@ -1,0 +1,355 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 0.0625rem solid rgba(34, 42, 66, 0.05);
+  border-radius: 0.2857rem;
+}
+.card {
+  background: #27293d;
+  border: 0;
+  position: relative;
+  width: 100%;
+  margin-bottom: 30px;
+  box-shadow: 0 1px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.card .card-body {
+  padding: 15px;
+}
+.card .card-body .card-description {
+  color: rgba(255, 255, 255, 0.6);
+}
+.card .avatar {
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+.card-user {
+  overflow: hidden;
+}
+.card-user .author {
+  text-align: center;
+  text-transform: none;
+  margin-top: 25px;
+}
+.card-user .author a+p.description {
+  margin-top: -7px;
+}
+.card-user .author .block {
+  position: absolute;
+  height: 100px;
+  width: 250px;
+}
+.card-user .author .block.block-one {
+  background: rgba(225, 78, 202, 0.6);
+  background: -webkit-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -o-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -moz-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
+  -webkit-transform: rotate(150deg);
+  -moz-transform: rotate(150deg);
+  -ms-transform: rotate(150deg);
+  -o-transform: rotate(150deg);
+  transform: rotate(150deg);
+  margin-top: -90px;
+  margin-left: -50px;
+}
+.card-user .author .block.block-two {
+  background: rgba(225, 78, 202, 0.6);
+  background: -webkit-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -o-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -moz-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
+  -webkit-transform: rotate(30deg);
+  -moz-transform: rotate(30deg);
+  -ms-transform: rotate(30deg);
+  -o-transform: rotate(30deg);
+  transform: rotate(30deg);
+  margin-top: -40px;
+  margin-left: -100px;
+}
+.card-user .author .block.block-three {
+  background: rgba(225, 78, 202, 0.6);
+  background: -webkit-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -o-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -moz-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
+  -webkit-transform: rotate(170deg);
+  -moz-transform: rotate(170deg);
+  -ms-transform: rotate(170deg);
+  -o-transform: rotate(170deg);
+  transform: rotate(170deg);
+  margin-top: -70px;
+  right: -45px;
+}
+.card-user .author .block.block-four {
+  background: rgba(225, 78, 202, 0.6);
+  background: -webkit-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -o-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: -moz-linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
+  -webkit-transform: rotate(150deg);
+  -moz-transform: rotate(150deg);
+  -ms-transform: rotate(150deg);
+  -o-transform: rotate(150deg);
+  transform: rotate(150deg);
+  margin-top: -25px;
+  right: -45px;
+}
+.card-user .avatar {
+  width: 124px;
+  height: 124px;
+  border: 5px solid #2b3553;
+  border-bottom-color: transparent;
+  background-color: transparent;
+  position: relative;
+}
+.card-user .card-body {
+  min-height: 240px;
+}
+.card-user .card-description {
+  margin-top: 30px;
+}
+.card .amount-cont {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: .875rem;
+  font-weight: 300;
+}
+.form-control {
+  background-color: #27293d;
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: #fff;
+  border: 1px solid #e14eca;
+  margin-bottom: 1rem;
+}
+.input-group-text {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #fff;
+  background-color: #27293d;
+  border: 1px solid #e14eca;
+  margin-bottom: 1rem;
+}
+.error-message {
+  text-align: center;
+}
+.text-warning {
+  color: #ff8d72 !important;
+  font-size: .875rem;
+  font-weight: 300;
+  margin-bottom: 1px;
+}
+.avatar-cont {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  margin: 0 auto;
+  margin-bottom: 1px;
+}
+a.btn-change-avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #fff;
+  background: #e14eca;
+  font-size: 1.25rem;
+  line-height: 40px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transition: all .3s ease 0s;
+}
+a.btn-change-avatar:hover, a.btn-change-avatar:focus, a.btn-change-avatar:active {
+  background: #b940a6;
+  transition: all .3s ease 0s;
+}
+
+/* START Active Inactive swith segment control */
+.segmented-control {
+  position: relative;
+  display: block;
+  width: 220px;
+  border: 1px solid #e14eca;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: none;
+  overflow: hidden;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -moz-transition-duration: 0.7s;
+  -o-transition-duration: 0.7s;
+  -webkit-transition-duration: 0.7s;
+  transition-duration: 0.7s;
+  -moz-transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  -o-transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  -webkit-transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  -moz-transition-property: none;
+  -o-transition-property: none;
+  -webkit-transition-property: none;
+  transition-property: none;
+  -webkit-tap-highlight-color: transparent; 
+}
+.segmented-control > input {
+  position: absolute;
+  left: -10000px;
+  opacity: 0;
+}
+.segmented-control > input[type='checkbox'] ~ label {
+  -moz-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  -webkit-transition-duration: 0s;
+  transition-duration: 0s;
+}
+.segmented-control > input[type='checkbox'] ~ label:before {
+  opacity: 0;
+}
+.segmented-control > input:disabled:nth-child(1) ~ label:nth-of-type(1) {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.segmented-control > input:nth-child(1):checked ~ label:nth-of-type(1):after, .segmented-control > input:nth-child(1):checked ~ label:nth-of-type(1):before {
+  opacity: 1;
+}
+.segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(1):after, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(1):before, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(1) ~ label:after, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(1) ~ label:before {
+  -moz-transform: translateX(0%);
+  -ms-transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+  transform: translateX(0%);
+}
+.segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(2):after, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(2):before, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(2) ~ label:after, .segmented-control > input:nth-child(1):checked ~ label:first-of-type:nth-last-of-type(2) ~ label:before {
+  -moz-transform: translateX(0%);
+  -ms-transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+  transform: translateX(0%);
+}
+.segmented-control > input:disabled:nth-child(2) ~ label:nth-of-type(2) {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.segmented-control > input:nth-child(2):checked ~ label:nth-of-type(2):after, .segmented-control > input:nth-child(2):checked ~ label:nth-of-type(2):before {
+  opacity: 1;
+}
+.segmented-control > input:nth-child(2):checked ~ label:first-of-type:nth-last-of-type(2):after, .segmented-control > input:nth-child(2):checked ~ label:first-of-type:nth-last-of-type(2):before, .segmented-control > input:nth-child(2):checked ~ label:first-of-type:nth-last-of-type(2) ~ label:after, .segmented-control > input:nth-child(2):checked ~ label:first-of-type:nth-last-of-type(2) ~ label:before {
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+}
+.segmented-control > label {
+  display: inline-block;
+  padding: 0 .71em;
+  cursor: pointer;
+  float: left;
+  line-height: 2.4375rem;      
+  font-size: 1.15rem;
+  font-weight: 300;
+  text-decoration: inherit;
+  -moz-transition-property: none;
+  -o-transition-property: none;
+  -webkit-transition-property: none;
+  transition-property: none;
+  -moz-transition-duration: inherit;
+  -o-transition-duration: inherit;
+  -webkit-transition-duration: inherit;
+  transition-duration: inherit;
+  -moz-transition-timing-function: inherit;
+  -o-transition-timing-function: inherit;
+  -webkit-transition-timing-function: inherit;
+  transition-timing-function: inherit;
+}
+.segmented-control > label:before, .segmented-control > label:after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.segmented-control > label:after {
+  color: white;
+  content: attr(data-value);
+  text-align: center;
+  padding: inherit;
+  z-index: 10;
+  font-style: inherit;
+  text-decoration: inherit;
+  font-weight: inherit;
+  opacity: 0;
+  -moz-transition-property: opacity, -moz-transform;
+  -o-transition-property: opacity, -o-transform;
+  -webkit-transition-property: opacity, -webkit-transform;
+  transition-property: opacity, transform;
+  -moz-transition-duration: inherit;
+  -o-transition-duration: inherit;
+  -webkit-transition-duration: inherit;
+  transition-duration: inherit;
+  -moz-transition-timing-function: inherit;
+  -o-transition-timing-function: inherit;
+  -webkit-transition-timing-function: inherit;
+  transition-timing-function: inherit;
+}
+.segmented-control > label:after, .segmented-control > label {
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.segmented-control > label:before {
+  content: '';
+  color: inherit;
+  background: #e14eca;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: transform;
+  -moz-transition-duration: inherit;
+  -o-transition-duration: inherit;
+  -webkit-transition-duration: inherit;
+  transition-duration: inherit;
+  -moz-transition-timing-function: inherit;
+  -o-transition-timing-function: inherit;
+  -webkit-transition-timing-function: inherit;
+  transition-timing-function: inherit;
+}
+.segmented-control > label:first-of-type:nth-last-of-type(2), .segmented-control > label:first-of-type:nth-last-of-type(2):after, .segmented-control > label:first-of-type:nth-last-of-type(2):before, .segmented-control > label:first-of-type:nth-last-of-type(2) ~ label, .segmented-control > label:first-of-type:nth-last-of-type(2) ~ label:after, .segmented-control > label:first-of-type:nth-last-of-type(2) ~ label:before {
+  width: 50%;
+  margin-bottom: 0;
+}
+/* END Active Inactive swith segment control */
+.btn-cancel{
+  float: right;
+  width: 300px;
+  background-color: darkgray;
+}
+.btn-create{
+  width: 300px;
+}
