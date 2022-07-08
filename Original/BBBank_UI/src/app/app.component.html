@@ -85,13 +85,13 @@
 
                       <!-- two radio buttons with same name binded to same model but different ids and different values make it work in a group  -->
                       <div class="segmented-control">
-                        <input type="radio" name="accountStatus" id="accountStatus-1" value="1"
+                        <input type="radio" name="accountStatus" id="accountStatus-1" value="Active"
                           [(ngModel)]="account.accountStatus" />
-                        <input type="radio" name="accountStatus" id="accountStatus-2" value="0"
+                        <input type="radio" name="accountStatus" id="accountStatus-2" value="InActive"
                           [(ngModel)]="account.accountStatus" />
 
                         <label for="accountStatus-1" data-value="Active">Active</label>
-                        <label for="accountStatus-2" data-value="Inactive">Inactive</label>
+                        <label for="accountStatus-2" data-value="InActive">Inactive</label>
                       </div>
                     </div>
                   </div>
