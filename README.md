@@ -17,19 +17,21 @@ Here is how both forms works in a nutshell:
 
 
 ## **About this exercise**
-Previously we worked on two codebase, **Backend Codebase** and **Frontend Codebase**. On backend side we performed data seeding for our API so that we can show that data in our frontend application from the database:
+Previously we had an **API** and **frontend angular application**. We performed data seeding for our API so that we can show that data in our frontend application from the database:
 
 **Backend Codebase**\
-Previously we did
+Previously we had an API in which we did
 
-* EF Code first approach to generate Database of a fictitious bank application called **BBBank**.
+* EF Code first approach to generate database of a fictitious bank application called **BBBank**.
 * Applied data seeding to the database.
 
 For more details see [data seeding](https://github.com/PatternsTechGit/PT_AzureSql_EFDataSeeding) lab.
 
 **Frontend Codebase**\
-Previously we did
+Previously we had frontend angular application in which we have
 
+* FontAwesome library for icons.
+* Bootstrap library for styling.
 * Created client side models to receive data
 * Created transaction service to call the API
 * Fixed the CORS error on the server side
@@ -48,9 +50,10 @@ In this exercise again we will be working on two codebase i.e. **Backend Codebas
 
 #### On backend side we would:
 * Do necessary model changes and execute migration commands
-* Create an **account service** and a contract for this service in the **Service** project 
-* Register the **service in asp core pipeline** as scoped 
 * Create an **account controller** with method `OpenAccount`
+* Create an **account service** and a contract for this service in the **Service** project 
+* Register the **service in asp.net core middleware** as scoped
+
 
 **Frontend Codebase**
 #### On frontend side we would:
@@ -61,7 +64,7 @@ In this exercise again we will be working on two codebase i.e. **Backend Codebas
 
 
 
-**Backend Implementation**
+## Backend Implementation
 
 Follow the below steps to implement backend code changes:
 
@@ -149,7 +152,7 @@ public interface IAccountsService
 }
 ```
 
-## Step 4: Creating Account Service Implementation
+## Step 4: Implementing Account Service 
 
 In **Services** project we will be implementing account service. Create new file **AccountService.cs**
 
@@ -197,7 +200,7 @@ builder.Services.AddScoped<IAccountsService, AccountService>();
 builder.Services.AddScoped<DbContext, BBBankContext>();
 ```
 
-## Step 6: Creating Open Account API
+## Step 6: Creating Open Account API Method
 
 Create a new API controller named `AccountsController` and inject the `IAccountsService` using the constructor.
 
@@ -240,7 +243,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 ```
 Now backend is ready and would be proceeding to implement frontend.
 
-**Frontend Implementation**
+## Frontend Implementation
 
 Follow the below steps to implement frontend code changes:
 
@@ -749,11 +752,13 @@ export class AppComponent {
 
 ```
 ## Step 6: Angular Form HTML
-Add code in `app.component.html`. First control is a dropdown that is bind to azure active directory users through `onAdUserSelect` method of `app.component.ts` class. Other input fields of account are bind as two way binding to `account` model.Input fields also have built in angular validators applied some of are:
+Add code in `app.component.html`. First control is a dropdown that is bind to azure active directory users through `onAdUserSelect` method of `app.component.ts` class. Other input fields of account are bind as two way binding to `account` model.\
+Input fields also have [built-in](https://angular.io/api/forms/Validators) angular validators applied, some of are:
 * required
 * minlength
 * maxlength 
 
+If any input control is in error state then angular form would also be in error state.
 ```ts
 <form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate>
   <div class="row">
