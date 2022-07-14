@@ -3,7 +3,7 @@
 
 ## What is angular form
 
-Applications use forms to enable users to log in, to update a profile, to enter sensitive information, and to perform many other data-entry tasks.
+Forms are an integral part of a web application. Practically every application comes with forms to be filled in by the users. Applications use forms to enable users to log in, to update a profile, to enter sensitive information, and to perform many other data-entry tasks.
 
 Angular provides two different approaches to handle **user input** through **forms**: 
 * Template-driven Forms
@@ -16,26 +16,26 @@ Here is how both forms works in a nutshell:
 ![approach](./readme_assets/choosinganapproach.png)
 
 
-## **About this exercise**
-Previously we had an **API** and **frontend angular application**. We performed data seeding for our API so that we can show that data in our frontend application from the database:
+# About this exercise
 
-**Backend Codebase**\
-Previously we had an API in which we did
+## Backend Code Base:
+
+Previously we have developed an **API** solution in asp.net core in which we have
 
 * EF Code first approach to generate database of a fictitious bank application called **BBBank**.
 * Applied data seeding to the database.
 
 For more details see [data seeding](https://github.com/PatternsTechGit/PT_AzureSql_EFDataSeeding) lab.
 
-**Frontend Codebase**\
-Previously we had frontend angular application in which we have
+## Frontend Codebase
+Previously we have angular application in which we have
 
 * FontAwesome library for icons.
 * Bootstrap library for styling.
-* Created client side models to receive data
-* Created transaction service to call the API
-* Fixed the CORS error on the server side
-* Populated html table, using data returned by API
+* Created client side models to receive data.
+* Created transaction service to call the API.
+* Fixed the CORS error on the server side.
+* Populated html table, using data returned by API.
 
 For more details see [Angular calling API](https://github.com/PatternsTechGit/PT_AngularCallingAPI) lab.
 
@@ -44,33 +44,33 @@ For more details see [Angular calling API](https://github.com/PatternsTechGit/PT
 
 ## **In this exercise**
 
-In this exercise again we will be working on two codebase i.e. **Backend Codebase** and **Frontend Codebase**.
+In this exercise again we will be working on both **frontend** & **backend** codebase.
 
 **Backend Codebase**
 
-#### On backend side we would:
-* Do necessary model changes and execute migration commands
-* Create an **account controller** with method `OpenAccount`
-* Create an **account service** and a contract for this service in the **Service** project 
-* Register the **service in asp.net core middleware** as scoped
+#### On server side we will:
+* Do necessary model changes and execute migration commands.
+* Create an **account controller** with method `OpenAccount`.
+* Create an **account service** and a contract for this service in the **Service** project.
+* Register the **service in asp.net core middleware** as scoped.
 
 
 **Frontend Codebase**
-#### On frontend side we would:
-* Create **template driven form** 
-* Perform **input fields validation**  
-* Create client side **models** to map data for API
-* Create the **account service** to call the API
+#### On frontend side we will:
+* Create **template driven form**.
+* Perform **input fields validation**.
+* Create client side **models** to map data for API.
+* Create the **account service** to call the API.
 
 
 
-## Backend Implementation
+# Server Side Implementation
 
-Follow the below steps to implement backend code changes:
+Follow the below steps to implement server side code changes:
 
 ## Step 1: User and Account model changes
 
-We will make some user model properties nullable so that if these are not provided from frontend then we should not be getting errors thrown by database so user model would be looks like this. Consider the question mark (?) in front of properties that needs to be nullable . 
+We will make some user model properties nullable so that if these are not provided from frontend then we should not be getting errors thrown by database so user model would be looks like this. Consider the **question mark (?)** in front of properties that needs to be nullable . 
 
 ```cs
     public class User : BaseEntity // Inheriting from Base Entity class
@@ -93,7 +93,7 @@ We will make some user model properties nullable so that if these are not provid
 
 ```
 
-And account model would looks like below, see the `AccountStatus` decorated with `[JsonConverter(typeof(JsonStringEnumConverter))]` so that it can map frontend values to account status enum.
+In **Account** class we will decorate the `AccountStatus` with `[JsonConverter(typeof(JsonStringEnumConverter))]` so that it can map frontend values to account status enum.
 
 ```cs
     public class Account : BaseEntity // Inheriting from Base Entity class
@@ -132,13 +132,16 @@ And account model would looks like below, see the `AccountStatus` decorated with
 ```
 
 ## Step 2 Data migration
-In step 1 we did some changes in `User` model, now we need to execute data migration commands so that changes can be reflected in database as well.
+After changes in `User` & `Account` model, now we need to execute data migration commands so that changes can be reflected in database as well.
 
-Execute following commands one by one:
-
->Add-Migration FormsLab
-
->Update-Database
+open package manage console and select infrastructure project and run the command `Add-Migration` which creates a new migration class as per specified name
+```
+Add-Migration FormsLab
+```
+Then run the `update-Database` which executes the last migration file created by the Add-Migration command and applies changes to the database schema.
+```
+Update-Database
+```
 
 ## Step 3: Creating Interface for Account Service
 
@@ -191,16 +194,16 @@ public class AccountService : IAccountsService
 }
 ```
 
-## Step 5: Register Account and Database Context Service
+## Step 5: Dependency Injecting BBBankContext & AccountService 
 
-In `Program.cs` file we will add **BBBankContext** and **IAccountsService** to services container.
+In `Program.cs` file we will inject the  **BBBankContext** and **IAccountsService** to services container, so that we can use the relevant object in services.
 
 ```csharp
 builder.Services.AddScoped<IAccountsService, AccountService>();
 builder.Services.AddScoped<DbContext, BBBankContext>();
 ```
 
-## Step 6: Creating Open Account API Method
+## Step 6: SettingUp Accounts Controller 
 
 Create a new API controller named `AccountsController` and inject the `IAccountsService` using the constructor.
 
@@ -241,14 +244,324 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 ```
-Now backend is ready and would be proceeding to implement frontend.
+Run the project and see its working. 
 
-## Frontend Implementation
-
+# Frontend Implementation
 Follow the below steps to implement frontend code changes:
 
-## Step 1: Component Styling
-Copy following CSS in existing `app.component.css` for angular form styling
+
+## Step 1: Create model classes
+
+Create a new file `account.ts` in **models** folder which will contain the `Account` class representing *account* model and  `User` class representing *User* model. Account model would be used to map with backend account model so that we can pass frontend model to API method as parameter.
+
+```ts
+export class Account {
+  accountTitle: string;
+  user: User;
+  currentBalance: number;
+  accountStatus: number;
+  accountNumber: string;
+}
+export class User {
+  id: string;
+  profilePicUrl: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+}
+```
+Create another file `azuread.service.ts` which will contain the `AzureAdUser` model to map azure active directory users
+```ts
+export interface AzureAdUser {
+    id: string;
+    surname: string;
+    givenName: string;
+    mail: string
+    displayName: string;
+}
+```
+## Step 2: Setup Account Service
+Create a new file `accounts.service.ts` in **services** folder which will contain the `openAccount` method which will call the API method to save the account information as below :
+
+```ts
+export default class AccountsService {
+  constructor(private httpClient: HttpClient) { }
+
+openAccount(account: Account): Observable<ApiResponse> {
+    const headers = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+    console.log(account);
+    return this.httpClient.post<ApiResponse>(`${environment.apiUrlBase}Accounts/OpenAccount`, JSON.stringify(account), headers);
+  }
+}
+```
+
+## Step 3: Setup Azure Active Directory Service.
+Create a new file `azuread.service.ts` in **services** folder which will contain the `getAzureAdUsersList` method which will call the azure logic app to get the users list
+```ts
+export default class AzureAdService {
+  constructor(private httpClient: HttpClient) { }
+
+  // Azure logic app is already set to receive an empty POST request that does the magic of fetching the access token and returning list of AD users 
+  getAzureAdUsersList(): Observable<AzureAdUser[]> {
+    return this.httpClient.post<AzureAdUser[]>(environment.azureAdUsersListUrl, {
+      "client_secret" : environment.client_secret,
+      "client_id" : environment.ApiclientId,
+      "tenantid" : environment.tenantid
+    });
+  }
+
+}
+```
+
+## Step 4: SettingUp Angular Form 
+Go to `app.component.html` and add dropdown control that is bind to azure active directory users. Other input fields of account are bind as two way binding to `account` model.
+
+
+Input fields also have [built-in](https://angular.io/api/forms/Validators) angular validators applied, some of are:
+* required
+* minlength
+* maxlength 
+
+If any input control is in error state then angular form would also be in error state.
+```ts
+<form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-user">
+        <div class="card-body">
+          <div class="author">
+            <div class="block block-one"></div>
+            <div class="block block-two"></div>
+            <div class="block block-three"></div>
+            <div class="block block-four"></div>
+            <!-- all the elements in the form are two way bind to a property called account of type Account.  -->
+            <div class="avatar-cont">
+              <img id="photo" alt="..." class="avatar" src="{{account.user.profilePicUrl}}" />
+              <a href="javascript:void(0)" class="btn-change-avatar"><i class="fas fa-camera"></i></a>
+            </div>
+
+          </div>
+          <div class="row mt-3">
+            <!-- Custom Validator https://www.digitalocean.com/community/tutorials/angular-custom-validation -->
+            <div class="col-sm-12 ml-auto mr-auto">
+              <div class="amount-cont">
+                <div class="form-row row">
+                  <!-- currently selected active directory user will be in selectedAdUser -->
+                  <!-- on Select's selection change "onAdUserSelect" function will be called -->
+                  <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser"
+                    (change)="onAdUserSelect()">
+                    <option [ngValue]="null" selected disabled>Select Azure AD User</option>
+                    <!-- All AD Users fetched from the server are in array of type azureAdUser called azureAdUsers  -->
+                    <!-- looping on that array to populate Select control and setting the individual value to adUser and picking up displayName from it for display -->
+                    <option *ngFor="let adUser of azureAdUsers" [ngValue]="adUser">{{adUser?.displayName}}</option>
+                  </select>
+                </div>
+                <div class="form-row row">
+                  <div class="col-6">
+                    <div class="my-1">
+                      <label for="accountTitle">Account Title</label>
+                      <!-- #accountTitle gives unique name of this control that is later referenced in validation. -->
+                      <!-- this control has required, maxlength, and minlength validators. -->
+                      <!-- and this control is two way binded to  account.accountTitle property -->
+                      <input #accountTitle="ngModel" type="text" class="form-control" id="accountTitle"
+                        placeholder="Account Title" [(ngModel)]="account.accountTitle" name="accountTitle" required
+                        minlength="4" maxlength="30" />
+                    </div>
+                    <div class="my-1">
+                      <label for="accountNumber">Account Number</label>
+                      <input #accountNumber="ngModel" type="text" class="form-control" id="accountNumber"
+                        placeholder="Account Number" [(ngModel)]="account.accountNumber" name="accountNumber"
+                        required />
+                    </div>
+                    <div class="my-1">
+                      <label for="openingBalance">Opening Balance</label>
+                      <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">$</div>
+                        </div>
+                        <input type="number" class="form-control" id="currentBalance" placeholder="Current Balance"
+                          [(ngModel)]="account.currentBalance" name="currentBalance"
+                          onKeyPress="if(this.value.length==10) return false;" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="my-1">
+                      <label for="phoneNumber">Phone Number</label>
+                      <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number"
+                        [(ngModel)]="account.user.phoneNumber" name="phoneNumber"
+                        onKeyPress="if(this.value.length==10) return false;" />
+                    </div>
+                    <div class="my-1">
+                      <label for="email">Email</label>
+                      <!-- special case where we are validating this text box using an Email Reg Ex along with other built in validators. -->
+                      <input type="email" class="form-control" placeholder="Email" [(ngModel)]="account.user.email"
+                        id="email" name="email" #email="ngModel" required minlength="6"
+                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                    </div>
+                    <div class="my-1">
+                      <label for="accountStatus">Account Status</label>
+
+                      <!-- two radio buttons with same name bind to same model but different ids and different values make it work in a group  -->
+                      <div class="segmented-control">
+                        <input type="radio" name="accountStatus" id="accountStatus-1" value="Active"
+                          [(ngModel)]="account.accountStatus" />
+                        <input type="radio" name="accountStatus" id="accountStatus-2" value="InActive"
+                          [(ngModel)]="account.accountStatus" />
+
+                        <label for="accountStatus-1" data-value="Active">Active</label>
+                        <label for="accountStatus-2" data-value="InActive">Inactive</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <!-- This block/set of error texts will only appear if accountTitle has any errors and accountTitle is touched ot dirty -->
+      <div class="error-message" *ngIf="
+          accountTitle.errors && (accountTitle.dirty || accountTitle.touched)
+        ">
+        <!-- with the set of error messages this particular error will only be shown if "required" validation is failed.  -->
+        <p class="text-warning" [hidden]="!accountTitle.errors?.['required']">
+          <b>Warning:</b> That Account Title is required.
+        </p>
+        <p class="text-warning" [hidden]="!accountTitle.errors?.['minlength']">
+          <b>Warning:</b> Account Title must be greater than 3 characters.
+        </p>
+      </div>
+      <!-- similar concept is applied on other validation messages -->
+      <div class="error-message" *ngIf="email.errors && (email.dirty || email.touched)">
+        <p class="text-warning" [hidden]="!email.errors?.['required']">
+          <b>Warning:</b> That Email is required.
+        </p>
+        <p class="text-warning" [hidden]="!email.errors?.['pattern']">
+          <b>Warning:</b> Email is not in correct format.
+        </p>
+        <p class="text-warning" [hidden]="!email.errors?.['minlength']">
+          <b>Warning:</b> Email must be greater than 6 characters.
+        </p>
+      </div>
+      <div class="error-message" *ngIf="accountNumber.errors && (accountNumber.dirty || accountNumber.touched)">
+        <p class="text-warning" [hidden]="!accountNumber.errors?.['required']">
+          <b>Warning:</b> Account Number is required.
+        </p>
+      </div>
+      <div class="row">
+        <div>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <button class="btn btn-cancel btn-block" type="button">Cancel</button>
+            </div>
+            <div class="col-6">
+              <!-- like we can track validation of individual forms we can also track validation of entire form -->
+              <!-- Create buttons caus the form to trigger submit behavior but is disabled until entire form is in valid sate. -->
+              <button [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+```
+
+
+## Step 4: Saving Account 
+
+Go to `app.component.ts` and create `onAdUserSelect` function which will be binding azure directory users to the dropdown.
+
+We will create `initializeEmptyForm` to empty the form, so that we can reset the form after success call of **openAccount**.
+
+We will create `onSubmit` function which will be used to call the account service to openAccount.
+
+Here is the code as below :
+
+```ts
+export class AppComponent {
+
+  @ViewChild('photo') photo: ElementRef;
+  // Entire form and its controls are two way binded to this property.
+  // This is the property when populated will be send back to server.
+  public account: Account;
+  // Array used to populate AD Users drop down.
+  azureAdUsers: AzureAdUser[];
+  // Selected user on drop down.
+  selectedAdUser: AzureAdUser;
+  constructor(private azureAdService: AzureAdService, private accountsService: AccountsService) {
+    this.initializeEmptyForm();
+  }
+  onAdUserSelect() {
+    // few of the  properties of account object will be populated from the properties of Azure AD User
+    this.account.user.id = this.selectedAdUser.id
+    this.account.user.firstName = this.selectedAdUser.givenName;
+    this.account.user.lastName = this.selectedAdUser.surname;
+    this.account.user.email = this.selectedAdUser.mail;
+    /*     this.azureAdService
+        .getAzureAdUsersPic(this.selectedAdUser.id)
+        .subscribe({
+          next: (data) => {
+            console.log(data);
+            this.photo['src'] = data['value'];
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        }); */
+  }
+  onSubmit() {
+    console.log(this.account);
+    this.accountsService
+    // sending the two way binded and populated account object to the server to get persisted.
+      .openAccount(this.account)
+      .subscribe({
+        next: (data) => {
+          // clearing up the form again after form data is sent to server.
+          this.initializeEmptyForm();
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+  initializeEmptyForm() {
+    // fetching list of Azure AD Users from azureAdService
+    this.azureAdService
+      .getAzureAdUsersList()
+      .subscribe({
+        next: (data) => {
+          //console.log(data['value']);
+          this.azureAdUsers = data['value'];
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+      // Setting up empty or default controls.
+    //this.selectedAdUser = null;
+    this.account = new Account();
+    this.account.accountStatus = 1;
+    this.account.user = new User();
+    this.account.user.profilePicUrl = '../../assets/images/No-Image.png';
+  }
+}
+```
+
+## Step 6: SettingUp Styling
+Go to `app.component.css` and add the following **css** for styling. 
 
 ```css
 .card {
@@ -607,308 +920,7 @@ a.btn-change-avatar:hover, a.btn-change-avatar:focus, a.btn-change-avatar:active
   width: 300px;
 }
 ```
-## Step 2: Create model classes
 
-Create a new file `account.ts` in **models** folder which will contain the `Account` class representing *account* model and  `User` class representing *User* model. Account model would be used to map with backend account model so that we can pass frontend model to API method as parameter.
-
-```ts
-export class Account {
-  accountTitle: string;
-  user: User;
-  currentBalance: number;
-  accountStatus: number;
-  accountNumber: string;
-}
-export class User {
-  id: string;
-  profilePicUrl: string;
-  email: string;
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-}
-```
-Create another file `azuread.service.ts` which will contain the `AzureAdUser` model to map azure active directory users
-```ts
-export interface AzureAdUser {
-    id: string;
-    surname: string;
-    givenName: string;
-    mail: string
-    displayName: string;
-}
-```
-## Step 3: Setup Account Service.
-Create a new file `accounts.service.ts` in **services** folder which will contain the `openAccount` method which will call the API method to save the account information as below :
-
-```ts
-export default class AccountsService {
-  constructor(private httpClient: HttpClient) { }
-
-openAccount(account: Account): Observable<ApiResponse> {
-    const headers = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }
-    console.log(account);
-    return this.httpClient.post<ApiResponse>(`${environment.apiUrlBase}Accounts/OpenAccount`, JSON.stringify(account), headers);
-  }
-}
-```
-
-## Step 4: Setup Azure Active Directory Service.
-Create a new file `azuread.service.ts` in **services** folder which will contain the `getAzureAdUsersList` method which will call the azure logic app to get the users list
-```ts
-export default class AzureAdService {
-  constructor(private httpClient: HttpClient) { }
-
-  // Azure logic app is already set to receive an empty POST request that does the magic of fetching the access token and returning list of AD users 
-  getAzureAdUsersList(): Observable<AzureAdUser[]> {
-    return this.httpClient.post<AzureAdUser[]>(environment.azureAdUsersListUrl, {
-      "client_secret" : environment.client_secret,
-      "client_id" : environment.ApiclientId,
-      "tenantid" : environment.tenantid
-    });
-  }
-
-}
-```
-## Step 5: Angular Form Code
-
-Add code in `app.component.ts`. It contains following methods:\
-`onAdUserSelect` which will be binding azure directory users to the dropdown\
-`onSubmit` which will be used to call the account service\
-`initializeEmptyForm` to empty the form after `onSubmit` successful call
-
-```ts
-export class AppComponent {
-
-  @ViewChild('photo') photo: ElementRef;
-  // Entire form and its controls are two way binded to this property.
-  // This is the property when populated will be send back to server.
-  public account: Account;
-  // Array used to populate AD Users drop down.
-  azureAdUsers: AzureAdUser[];
-  // Selected user on drop down.
-  selectedAdUser: AzureAdUser;
-  constructor(private azureAdService: AzureAdService, private accountsService: AccountsService) {
-    this.initializeEmptyForm();
-  }
-  onAdUserSelect() {
-    // few of the  properties of account object will be populated from the properties of Azure AD User
-    this.account.user.id = this.selectedAdUser.id
-    this.account.user.firstName = this.selectedAdUser.givenName;
-    this.account.user.lastName = this.selectedAdUser.surname;
-    this.account.user.email = this.selectedAdUser.mail;
-    /*     this.azureAdService
-        .getAzureAdUsersPic(this.selectedAdUser.id)
-        .subscribe({
-          next: (data) => {
-            console.log(data);
-            this.photo['src'] = data['value'];
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        }); */
-  }
-  onSubmit() {
-    console.log(this.account);
-    this.accountsService
-    // sending the two way binded and populated account object to the server to get persisted.
-      .openAccount(this.account)
-      .subscribe({
-        next: (data) => {
-          // clearing up the form again after form data is sent to server.
-          this.initializeEmptyForm();
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
-  }
-  initializeEmptyForm() {
-    // fetching list of Azure AD Users from azureAdService
-    this.azureAdService
-      .getAzureAdUsersList()
-      .subscribe({
-        next: (data) => {
-          //console.log(data['value']);
-          this.azureAdUsers = data['value'];
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
-      // Setting up empty or default controls.
-    //this.selectedAdUser = null;
-    this.account = new Account();
-    this.account.accountStatus = 1;
-    this.account.user = new User();
-    this.account.user.profilePicUrl = '../../assets/images/No-Image.png';
-  }
-}
-
-```
-## Step 6: Angular Form HTML
-Add code in `app.component.html`. First control is a dropdown that is bind to azure active directory users through `onAdUserSelect` method of `app.component.ts` class. Other input fields of account are bind as two way binding to `account` model.\
-Input fields also have [built-in](https://angular.io/api/forms/Validators) angular validators applied, some of are:
-* required
-* minlength
-* maxlength 
-
-If any input control is in error state then angular form would also be in error state.
-```ts
-<form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate>
-  <div class="row">
-    <div class="col-12">
-      <div class="card card-user">
-        <div class="card-body">
-          <div class="author">
-            <div class="block block-one"></div>
-            <div class="block block-two"></div>
-            <div class="block block-three"></div>
-            <div class="block block-four"></div>
-            <!-- all the elements in the form are two way bind to a property called account of type Account.  -->
-            <div class="avatar-cont">
-              <img id="photo" alt="..." class="avatar" src="{{account.user.profilePicUrl}}" />
-              <a href="javascript:void(0)" class="btn-change-avatar"><i class="fas fa-camera"></i></a>
-            </div>
-
-          </div>
-          <div class="row mt-3">
-            <!-- Custom Validator https://www.digitalocean.com/community/tutorials/angular-custom-validation -->
-            <div class="col-sm-12 ml-auto mr-auto">
-              <div class="amount-cont">
-                <div class="form-row row">
-                  <!-- currently selected active directory user will be in selectedAdUser -->
-                  <!-- on Select's selection change "onAdUserSelect" function will be called -->
-                  <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser"
-                    (change)="onAdUserSelect()">
-                    <option [ngValue]="null" selected disabled>Select Azure AD User</option>
-                    <!-- All AD Users fetched from the server are in array of type azureAdUser called azureAdUsers  -->
-                    <!-- looping on that array to populate Select control and setting the individual value to adUser and picking up displayName from it for display -->
-                    <option *ngFor="let adUser of azureAdUsers" [ngValue]="adUser">{{adUser?.displayName}}</option>
-                  </select>
-                </div>
-                <div class="form-row row">
-                  <div class="col-6">
-                    <div class="my-1">
-                      <label for="accountTitle">Account Title</label>
-                      <!-- #accountTitle gives unique name of this control that is later referenced in validation. -->
-                      <!-- this control has required, maxlength, and minlength validators. -->
-                      <!-- and this control is two way binded to  account.accountTitle property -->
-                      <input #accountTitle="ngModel" type="text" class="form-control" id="accountTitle"
-                        placeholder="Account Title" [(ngModel)]="account.accountTitle" name="accountTitle" required
-                        minlength="4" maxlength="30" />
-                    </div>
-                    <div class="my-1">
-                      <label for="accountNumber">Account Number</label>
-                      <input #accountNumber="ngModel" type="text" class="form-control" id="accountNumber"
-                        placeholder="Account Number" [(ngModel)]="account.accountNumber" name="accountNumber"
-                        required />
-                    </div>
-                    <div class="my-1">
-                      <label for="openingBalance">Opening Balance</label>
-                      <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text">$</div>
-                        </div>
-                        <input type="number" class="form-control" id="currentBalance" placeholder="Current Balance"
-                          [(ngModel)]="account.currentBalance" name="currentBalance"
-                          onKeyPress="if(this.value.length==10) return false;" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="my-1">
-                      <label for="phoneNumber">Phone Number</label>
-                      <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number"
-                        [(ngModel)]="account.user.phoneNumber" name="phoneNumber"
-                        onKeyPress="if(this.value.length==10) return false;" />
-                    </div>
-                    <div class="my-1">
-                      <label for="email">Email</label>
-                      <!-- special case where we are validating this text box using an Email Reg Ex along with other built in validators. -->
-                      <input type="email" class="form-control" placeholder="Email" [(ngModel)]="account.user.email"
-                        id="email" name="email" #email="ngModel" required minlength="6"
-                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
-                    </div>
-                    <div class="my-1">
-                      <label for="accountStatus">Account Status</label>
-
-                      <!-- two radio buttons with same name bind to same model but different ids and different values make it work in a group  -->
-                      <div class="segmented-control">
-                        <input type="radio" name="accountStatus" id="accountStatus-1" value="Active"
-                          [(ngModel)]="account.accountStatus" />
-                        <input type="radio" name="accountStatus" id="accountStatus-2" value="InActive"
-                          [(ngModel)]="account.accountStatus" />
-
-                        <label for="accountStatus-1" data-value="Active">Active</label>
-                        <label for="accountStatus-2" data-value="InActive">Inactive</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <!-- This block/set of error texts will only appear if accountTitle has any errors and accountTitle is touched ot dirty -->
-      <div class="error-message" *ngIf="
-          accountTitle.errors && (accountTitle.dirty || accountTitle.touched)
-        ">
-        <!-- with the set of error messages this particular error will only be shown if "required" validation is failed.  -->
-        <p class="text-warning" [hidden]="!accountTitle.errors?.['required']">
-          <b>Warning:</b> That Account Title is required.
-        </p>
-        <p class="text-warning" [hidden]="!accountTitle.errors?.['minlength']">
-          <b>Warning:</b> Account Title must be greater than 3 characters.
-        </p>
-      </div>
-      <!-- similar concept is applied on other validation messages -->
-      <div class="error-message" *ngIf="email.errors && (email.dirty || email.touched)">
-        <p class="text-warning" [hidden]="!email.errors?.['required']">
-          <b>Warning:</b> That Email is required.
-        </p>
-        <p class="text-warning" [hidden]="!email.errors?.['pattern']">
-          <b>Warning:</b> Email is not in correct format.
-        </p>
-        <p class="text-warning" [hidden]="!email.errors?.['minlength']">
-          <b>Warning:</b> Email must be greater than 6 characters.
-        </p>
-      </div>
-      <div class="error-message" *ngIf="accountNumber.errors && (accountNumber.dirty || accountNumber.touched)">
-        <p class="text-warning" [hidden]="!accountNumber.errors?.['required']">
-          <b>Warning:</b> Account Number is required.
-        </p>
-      </div>
-      <div class="row">
-        <div>
-          <div class="row">
-            <div class="col-6 mb-3">
-              <button class="btn btn-cancel btn-block" type="button">Cancel</button>
-            </div>
-            <div class="col-6">
-              <!-- like we can track validation of individual forms we can also track validation of entire form -->
-              <!-- Create buttons caus the form to trigger submit behavior but is disabled until entire form is in valid sate. -->
-              <button [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</form>
-```
 ------
 ### Final Output:
 
