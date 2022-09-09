@@ -30,12 +30,12 @@ For more details see [data seeding](https://github.com/PatternsTechGit/PT_AzureS
 ## Frontend Codebase
 Previously we have angular application in which we have
 
-* FontAwesome library for icons.
-* Bootstrap library for styling.
-* Created client side models to receive data.
-* Created transaction service to call the API.
-* Fixed the CORS error on the server side.
-* Populated html table, using data returned by API.
+* **FontAwesome** library for icons.
+* **Bootstrap** library for styling.
+* Created client side models to **receive data**.
+* Created transaction service to **call the API**.
+* Fixed the **CORS error** on the server side.
+* Populated **html table**, using data returned by API.
 
 For more details see [Angular calling API](https://github.com/PatternsTechGit/PT_AngularCallingAPI) lab.
 
@@ -62,7 +62,8 @@ In this exercise again we will be working on both **frontend** & **backend** cod
 * Create client side **models** to map data for API.
 * Create the **account service** to call the API.
 
-
+---------------------
+---------------------
 
 # Server Side Implementation
 
@@ -70,8 +71,9 @@ Follow the below steps to implement server side code changes:
 
 ## Step 1: User and Account model changes
 
-We will make some user model properties nullable so that if these are not provided from frontend then we should not be getting errors thrown by database so user model would be looks like this. Consider the **question mark (?)** in front of properties that needs to be nullable . 
+We will make some **user model properties** nullable so that if these are not provided from frontend then we should not be getting errors thrown by database so user model would be looks like this. Consider the **question mark (?)** in front of properties that needs to be nullable . 
 
+- For this go to **`User.cs`** file in **`Entities`** folder. We will add **' ? '** in front of **`FirstName,  LastName`** and **`ProfilePicUrl`** properties as shown below.
 ```cs
     public class User : BaseEntity // Inheriting from Base Entity class
     {
@@ -93,7 +95,14 @@ We will make some user model properties nullable so that if these are not provid
 
 ```
 
-In **Account** class we will decorate the `AccountStatus` with `[JsonConverter(typeof(JsonStringEnumConverter))]` so that it can map frontend values to account status enum.
+- Now in **Account** class in `Account.cs` file. Here we will decorate the `AccountStatus` with code below:
+```cs
+//at the top
+using System.Text.Json.Serialization;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+``` 
+It will **map** frontend values to account status **`enum`**. And body of our `Account.cs` file will look like this
 
 ```cs
     public class Account : BaseEntity // Inheriting from Base Entity class
@@ -130,7 +139,7 @@ In **Account** class we will decorate the `AccountStatus` with `[JsonConverter(t
         InActive = 0    // When an account cannot perform transaction
     }
 ```
-
+-----------------
 ## Step 2 Data migration
 After changes in `User` & `Account` model, now we need to execute data migration commands so that changes can be reflected in database as well.
 
