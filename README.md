@@ -189,7 +189,7 @@ public class AccountService : IAccountsService
 }
 ```
 
-## Step 4: Dependency Injecting BBBankContext & AccountService 
+## Step 4: Dependency Injecting  AccountService 
 
 In `Program.cs` file we will inject the **IAccountsService** to services container, so that we can use the relevant object in services.
 
