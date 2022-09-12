@@ -24,10 +24,10 @@ namespace Services
             account.Id = Guid.NewGuid().ToString();
             // If the user with the same User ID is already in teh system we simply set the userId forign Key of Account with it else 
             // first we create that user and then use it's ID.
-            var user = await _bbBankContext.Users.FirstOrDefaultAsync(x=>x.Id == account.User.Id);
+            var user = _bbBankContext.Users.FirstOrDefault(x => x.Id == account.User.Id);
             if (user == null)
             {
-                await _bbBankContext.Users.AddAsync(account.User);
+                _bbBankContext.Users.Add(account.User);
                 account.UserId = account.User.Id;
             }
             else
@@ -35,9 +35,7 @@ namespace Services
                 account.UserId = user.Id;
             }
             // Once User ID forigen key and Account ID Primary Key is set we add the new accoun in Accounts.
-            await this._bbBankContext.Accounts.AddAsync(account);
-            // Once everything in place we make the Database call.
-            await this._bbBankContext.SaveChangesAsync();
+             this._bbBankContext.Accounts.Add(account);
         }
     }
 }

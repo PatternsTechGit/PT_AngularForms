@@ -23,9 +23,9 @@ Here is how both forms works in a nutshell:
 Previously we have developed an **API** solution in asp.net core in which we have
 
 * EF Code first approach to generate database of a fictitious bank application called **BBBank**.
-* Applied data seeding to the database.
+*  Api solution in Asp.net core that have just two api functions `GetLast12MonthBalances` & `GetLast12MonthBalances/{userId}` which returns data of the last 12 months total balances.
 
-For more details see [data seeding](https://github.com/PatternsTechGit/PT_AzureSql_EFDataSeeding) lab.
+For more details see [Angular calling API](https://github.com/PatternsTechGit/PT_AngularCallingAPI) lab.
 
 ## Frontend Codebase
 Previously we have angular application in which we have
@@ -49,7 +49,6 @@ In this exercise again we will be working on both **frontend** & **backend** cod
 **Backend Codebase**
 
 #### On server side we will:
-* Do necessary model changes and execute migration commands.
 * Create an **account controller** with method `OpenAccount`.
 * Create an **account service** and a contract for this service in the **Service** project.
 * Register the **service in asp.net core middleware** as scoped.
@@ -116,7 +115,7 @@ It will **map** frontend values to account status **`enum`**. And body of our `A
         //Available Balance of the account
         public decimal CurrentBalance { get; set; }
 
-        // This decoration is required to conver integer coming in from UI to respective Enum
+        // This decoration is required to convert integer coming in from UI to respective Enum
         [JsonConverter(typeof(JsonStringEnumConverter))]
         //Account's status
         public AccountStatus AccountStatus { get; set; }
@@ -132,7 +131,7 @@ It will **map** frontend values to account status **`enum`**. And body of our `A
         public virtual ICollection<Transaction> Transactions { get; set; }
     }
 
-    // Two posible statuses of an account
+    // Two possible statuses of an account
     public enum AccountStatus
     {
         Active = 1,     // When an account can perform transactions
@@ -140,19 +139,8 @@ It will **map** frontend values to account status **`enum`**. And body of our `A
     }
 ```
 -----------------
-## Step 2 Data migration
-After changes in `User` & `Account` model, now we need to execute data migration commands so that changes can be reflected in database as well.
 
-open package manage console and select infrastructure project and run the command `Add-Migration` which creates a new migration class as per specified name
-```
-Add-Migration FormsLab
-```
-Then run the `update-Database` which executes the last migration file created by the Add-Migration command and applies changes to the database schema.
-```
-Update-Database
-```
-
-## Step 3: Creating Interface for Account Service
+## Step 2: Creating Interface for Account Service
 
 In **Services** project create an interface (contract) in **Contracts** folder to implement the separation of concerns.
 It will make our code testable and injectable as a dependency.
@@ -164,7 +152,7 @@ public interface IAccountsService
 }
 ```
 
-## Step 4: Implementing Account Service 
+## Step 3: Implementing Account Service 
 
 In **Services** project we will be implementing account service. Create new file **AccountService.cs**
 
@@ -179,40 +167,37 @@ public class AccountService : IAccountsService
     {
         _bbBankContext = BBBankContext;
     }
-    public async Task OpenAccount(Account account)
-    {
-        // Setting up ID of new incoming Account to be created.
-        account.Id = Guid.NewGuid().ToString();
-        // If the user with the same User ID is already in teh system we simply set the userId forign Key of Account with it else 
-        // first we create that user and then use it's ID.
-        var user = await _bbBankContext.Users.FirstOrDefaultAsync(x=>x.Id == account.User.Id);
-        if (user == null)
+   public async Task OpenAccount(Account account)
         {
-            await _bbBankContext.Users.AddAsync(account.User);
-            account.UserId = account.User.Id;
+            // Setting up ID of new incoming Account to be created.
+            account.Id = Guid.NewGuid().ToString();
+            // If the user with the same User ID is already in teh system we simply set the userId forignKey of Account with it else 
+            // first we create that user and then use it's ID.
+            var user = _bbBankContext.Users.FirstOrDefault(x => x.Id == account.User.Id);
+            if (user == null)
+            {
+                _bbBankContext.Users.Add(account.User);
+                account.UserId = account.User.Id;
+            }
+            else
+            {
+                account.UserId = user.Id;
+            }
+            // Once User ID forignkey and Account ID Primary Key is set we add the new account in Accounts.
+             this._bbBankContext.Accounts.Add(account);
         }
-        else
-        {
-            account.UserId = user.Id;
-        }
-        // Once User ID forigen key and Account ID Primary Key is set we add the new accoun in Accounts.
-        await this._bbBankContext.Accounts.AddAsync(account);
-        // Once everything in place we make the Database call.
-        await this._bbBankContext.SaveChangesAsync();
-    }
 }
 ```
 
-## Step 5: Dependency Injecting BBBankContext & AccountService 
+## Step 4: Dependency Injecting BBBankContext & AccountService 
 
-In `Program.cs` file we will inject the  **BBBankContext** and **IAccountsService** to services container, so that we can use the relevant object in services.
+In `Program.cs` file we will inject the **IAccountsService** to services container, so that we can use the relevant object in services.
 
 ```csharp
 builder.Services.AddScoped<IAccountsService, AccountService>();
-builder.Services.AddScoped<DbContext, BBBankContext>();
 ```
 
-## Step 6: SettingUp Accounts Controller 
+## Step 5: SettingUp Accounts Controller 
 
 Create a new API controller named `AccountsController` and inject the `IAccountsService` using the constructor.
 
@@ -243,7 +228,7 @@ public async Task<ActionResult> OpenAccount(Account account)
 }
 ```
 
-## Step 7: Disable ASP.NET Core model validation 
+## Step 6: Disable ASP.NET Core model validation 
 
 We need to disable ASP.NET Core model validation so that we does not get model validation errors as non-nullable `Account` model properties would be expecting values. So add following code in `program.cs`
 
@@ -752,7 +737,7 @@ a.btn-change-avatar:hover, a.btn-change-avatar:focus, a.btn-change-avatar:active
   transition: all .3s ease 0s;
 }
 
-/* START Active Inactive swith segment control */
+/* START Active Inactive switch segment control */
 .segmented-control {
   position: relative;
   display: block;
@@ -919,7 +904,7 @@ a.btn-change-avatar:hover, a.btn-change-avatar:focus, a.btn-change-avatar:active
   width: 50%;
   margin-bottom: 0;
 }
-/* END Active Inactive swith segment control */
+/* END Active Inactive switch segment control */
 .btn-cancel{
   float: right;
   width: 300px;

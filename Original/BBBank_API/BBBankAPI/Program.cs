@@ -46,14 +46,11 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 ///...Dependency Injection settings
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAccountsService, AccountService>();
-builder.Services.AddScoped<DbContext, BBBankContext>();
+
 
 //Adding EF DBContext in the application services using the connectionString fetched above.
 //UseLazyLoadingProxies : Lazy loading means that the related data is transparently loaded from the database when the navigation property is accessed.
-builder.Services.AddDbContext<BBBankContext>(
-b => b.UseSqlServer(connectionString)
-.UseLazyLoadingProxies(true)
-);
+builder.Services.AddSingleton<BBBankContext>();
 
 var app = builder.Build();
 
